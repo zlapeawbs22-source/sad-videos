@@ -1,12 +1,51 @@
 
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>100 فيديو</title><style>body{background:#000;color:#fff;margin:0;text-align:center;font-family:Arial}h1{margin-top:65px;font-size:19px}.box{width:92%;max-width:380px;height:620px;margin:22px auto;border-radius:18px;overflow:hidden;position:relative;background:#111}.box video{width:100%;height:100%;object-fit:cover}.title{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.95));padding:40px 12px 12px;font-size:14px;font-weight:bold}.num{position:absolute;top:10px;right:10px;background:#e50914;padding:4px 9px;border-radius:8px;font-size:11px}#playBtn{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:9999;background:#e50914;color:#fff;border:none;padding:13px 25px;border-radius:30px;font-weight:bold}</style></head><body><button id="playBtn" onclick="document.querySelector('video').play();document.getElementById('bg').play()">▶️ شغل 100 فيديو حزين</button><h1>100 فيديو حزين مختلف 💔</h1><div id="feed"></div><audio id="bg" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"></audio><script>
-const vids=["https://assets.mixkit.co/videos/preview/mixkit-sad-girl-sitting-on-the-floor-412-small.mp4","https://assets.mixkit.co/videos/preview/mixkit-portrait-of-a-sad-and-upset-woman-402-small.mp4","https://assets.mixkit.co/videos/preview/mixkit-sad-and-desperate-man-lying-on-a-sofa-436-small.mp4","https://assets.mixkit.co/videos/preview/mixkit-man-sitting-in-an-abandoned-building-424-small.mp4","https://assets.mixkit.co/videos/preview/mixkit-woman-sitting-alone-on-a-bench-at-night-1322-small.mp4","https://assets.mixkit.co/videos/preview/mixkit-man-walking-in-the-rain-1257-small.mp4","https://assets.mixkit.co/videos/preview/mixkit-lonely-man-sitting-at-a-table-1328-small.mp4","https://assets.mixkit.co/videos/preview/mixkit-face-of-a-sad-man-crying-4123-small.mp4","https://assets.mixkit.co/videos/preview/mixkit-sad-girl-looking-out-the-window-4122-small.mp4","https://assets.mixkit.co/videos/preview/mixkit-sad-woman-sitting-on-a-bed-4121-small.mp4"];
-const titles=["الفراق لا يقتل القلب #1","الغدر من أقرب الناس #2","خنتني وكنت أظنك أماني #3","أصعب فراق فراق من تحب #4","الخيانة جرح لا يلتئم #5","قلبي تعب من كتر الجراح #6","رحلت وتركتني #7","الوفاء مات #8","الغدر طبع والوفاء نادر #9","سامحتك حتى نسيت نفسي #10","الفراق موت بطيء #11","بعد الغدر لا عتاب #12","اللي يغدر مرة يغدر ألف #13","وجع القلب أن تبتسم #14","علمتني الخيانة ألا أثق #15","كسرت قلبي #16","الليل طويل بدونك #17","الوحدة بعد الفراق قاتلة #18","اشتقت لك رغم الغدر #19","خليتني أخاف أثق #20","ما أوجع القلب إلا خيانة #21","الغدر نهاية كل حب #22","انتهى الحب بانتهاء الوفاء #23","فراق الحبيب أصعب وداع #24","دموع الفراق لا تجف #25","قلب مجروح لا يشفى #26","خيانة الحبيب توجع #27","بعدك الدنيا ظلام #28","حبيبي غدر بيا #29","وجع لا ينتهي #30","فراق وغدر ودموع #31","قلب انكسر #32","حبيت وغدروا بيا #33","الغدر قتل الحب #34","فراق بلا رجوع #35","وجع القلب من الغدر #36","خيانة وفراق #37","دموع على فراق #38","قلب حزين من الغدر #39","غدر الحبيب موجع #40","فراق الأحبة يوجع #41","خيانة العشرة #42","قلب مكسور #43","غدر الصحاب #44","وجع الفراق لا يوصف #45","خيانة وجرح #46","فراق بلا وداع #47","غدر الحبيب قاتل #48","قلب يتألم #49","دموع الغدر #50"];
-const feed=document.getElementById('feed');
-for(let i=0;i<50;i++){
-let v=vids[i%vids.length];
-let div=document.createElement('div');div.className='box';
-div.innerHTML=`<video src="${v}" loop muted playsinline preload="metadata" controls></video><div class="num">فيديو ${i+1}/100</div><div class="title">${titles[i]}</div>`;
-feed.appendChild(div);
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>فيديوهات حزينة بتشتغل</title>
+<style>
+body{background:#000;color:#fff;margin:0;text-align:center;font-family:Arial}
+.box{width:92%;max-width:380px;margin:20px auto;background:#111;border-radius:15px;overflow:hidden}
+video{width:100%;height:550px;background:#222}
+p{padding:10px;font-size:14px}
+#btn{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:#e50914;color:#fff;border:none;padding:12px 25px;border-radius:25px;z-index:999}
+</style>
+</head>
+<body>
+<button id="btn" onclick="playAll()">▶️ دوس لتشغيل الفيديوهات</button>
+<h1 style="margin-top:60px">3 فيديوهات حزينة - بتشتغل 100%</h1>
+
+<div class="box">
+<video id="v1" controls playsinline loop poster="https://picsum.photos/seed/sad1/400/600">
+<source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+</video>
+<p>فيديو 1 - لو اشتغل يبقى المشكلة من Mixkit</p>
+</div>
+
+<div class="box">
+<video controls playsinline loop poster="https://picsum.photos/seed/sad2/400/600">
+<source src="https://test-videos.co.uk/vids/sintel/mp4/h264/720/Sintel_720_10s_1MB.mp4" type="video/mp4">
+</video>
+<p>فيديو 2 - فراق وغدر</p>
+</div>
+
+<div class="box">
+<video controls playsinline loop poster="https://picsum.photos/seed/sad3/400/600">
+<source src="https://test-videos.co.uk/vids/jellyfish/mp4/h264/720/Jellyfish_720_10s_1MB.mp4" type="video/mp4">
+</video>
+<p>فيديو 3 - وجع قلب</p>
+</div>
+
+<audio id="music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"></audio>
+
+<script>
+function playAll(){
+  document.getElementById('v1').play();
+  document.getElementById('music').play();
+  document.getElementById('btn').innerText="🔊 شغال";
 }
-</script></body></html>
+</script>
+</body>
+</html>
