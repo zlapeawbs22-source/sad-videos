@@ -4,75 +4,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>كلنا عابري سبيل</title>
+<title>كلنا عابري سبيل - 40 ثانية</title>
 <style>
 body{background:#000;color:#fff;margin:0;text-align:center;font-family:Arial}
-h1{padding:15px;font-size:22px}
-.box{width:92%;max-width:360px;height:600px;margin:15px auto;border-radius:16px;overflow:hidden;background:#111;position:relative}
-.box video{width:100%;height:100%;object-fit:cover;background:#222}
-.bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.5)}
-.txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;font-size:20px;font-weight:bold;text-shadow:2px 2px 10px #000}
-#musicBtn{position:fixed;top:10px;left:10px;z-index:999;background:#e50914;color:#fff;border:none;padding:10px 14px;border-radius:20px;font-size:13px}
+h1{padding:15px;font-size:20px}
+.clip{width:92%;max-width:380px;height:680px;margin:25px auto;border-radius:20px;overflow:hidden;position:relative;background:#111;box-shadow:0 0 20px rgba(255,0,0,0.2)}
+.clip-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:all 0.8s}
+.clip-text{position:absolute;bottom:60px;left:0;right:0;padding:15px;font-size:19px;font-weight:bold;background:linear-gradient(transparent,rgba(0,0,0,0.9));text-shadow:2px 2px 8px #000}
+.progress{position:absolute;bottom:0;left:0;height:4px;background:#e50914;width:0%;transition:width 0.1s}
+.info{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.6);padding:5px 10px;border-radius:10px;font-size:11px}
+.timer{position:absolute;top:15px;left:15px;background:rgba(229,9,20,0.8);padding:5px 10px;border-radius:10px;font-size:11px}
+#musicBtn{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:999;background:#e50914;color:#fff;border:none;padding:12px 20px;border-radius:25px;font-size:14px}
 </style>
 </head>
 <body>
-<button id="musicBtn">🔇 شغل الموسيقى</button>
-<h1>كلنا عابري سبيل 💔</h1>
-<div id="feed"></div>
-<audio id="bgMusic" preload="none" loop></audio>
+<button id="musicBtn" onclick="toggleAll()">▶️ شغل الكل بالموسيقى</button>
+<h1 style="margin-top:60px">فيديو كليب حزين 40 ثانية 💔</h1>
+<div id="clips"></div>
+<audio id="mainAudio" loop></audio>
 
 <script>
-// فيديوهات خفيفة جدا - small بدل large
-const vids=[
-"https://assets.mixkit.co/videos/preview/mixkit-sad-girl-sitting-on-the-floor-412-small.mp4",
-"https://assets.mixkit.co/videos/preview/mixkit-portrait-of-a-sad-and-upset-woman-402-small.mp4",
-"https://assets.mixkit.co/videos/preview/mixkit-man-walking-in-the-rain-1257-small.mp4",
-"https://assets.mixkit.co/videos/preview/mixkit-woman-sitting-alone-on-a-bench-at-night-1322-small.mp4"
+// كل كليب = 20 صورة + أغنية حزينة + مدة 40 ثانية
+const clipsData=[
+{
+  title:"كليب فراق - 20 صورة",
+  music:"https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=sad-piano-110618.mp3",
+  quotes:["الفراق لا يقتل القلب","لكنه يترك القلب بلا حياة","أصعب فراق فراق من تحب","رحلت وتركتني لوجعي","الفراق وجع لا ينتهي"],
+  images:["https://images.pexels.com/photos/1482476/pexels-photo-1482476.jpeg?w=500","https://images.pexels.com/photos/1421903/pexels-photo-1421903.jpeg?w=500","https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg?w=500","https://images.pexels.com/photos/1165991/pexels-photo-1165991.jpeg?w=500","https://images.pexels.com/photos/1279813/pexels-photo-1279813.jpeg?w=500","https://images.pexels.com/photos/1536314/pexels-photo-1536314.jpeg?w=500","https://images.pexels.com/photos/1482476/pexels-photo-1482476.jpeg?w=500","https://images.pexels.com/photos/1421903/pexels-photo-1421903.jpeg?w=500","https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg?w=500","https://images.pexels.com/photos/1165991/pexels-photo-1165991.jpeg?w=500","https://images.pexels.com/photos/1279813/pexels-photo-1279813.jpeg?w=500","https://images.pexels.com/photos/1536314/pexels-photo-1536314.jpeg?w=500","https://images.pexels.com/photos/1482476/pexels-photo-1482476.jpeg?w=500","https://images.pexels.com/photos/1421903/pexels-photo-1421903.jpeg?w=500","https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg?w=500","https://images.pexels.com/photos/1165991/pexels-photo-1165991.jpeg?w=500","https://images.pexels.com/photos/1279813/pexels-photo-1279813.jpeg?w=500","https://images.pexels.com/photos/1536314/pexels-photo-1536314.jpeg?w=500","https://images.pexels.com/photos/1482476/pexels-photo-1482476.jpeg?w=500","https://images.pexels.com/photos/1421903/pexels-photo-1421903.jpeg?w=500"]
+},
+{
+  title:"كليب غدر وخيانة - 20 صورة",
+  music:"https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3?filename=sad-background-music-9429.mp3",
+  quotes:["الغدر من أقرب الناس هو الوجع الحقيقي","خنتني وكنت أظنك أماني","الخيانة جرح لا يلتئم","الغدر طبع والوفاء نادر","اللي يغدر مرة يغدر ألف مرة"],
+  images:["https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg?w=500","https://images.pexels.com/photos/1165991/pexels-photo-1165991.jpeg?w=500","https://images.pexels.com/photos/1279813/pexels-photo-1279813.jpeg?w=500","https://images.pexels.com/photos/1536314/pexels-photo-1536314.jpeg?w=500","https://images.pexels.com/photos/1482476/pexels-photo-1482476.jpeg?w=500","https://images.pexels.com/photos/1421903/pexels-photo-1421903.jpeg?w=500","https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg?w=500","https://images.pexels.com/photos/1165991/pexels-photo-1165991.jpeg?w=500","https://images.pexels.com/photos/1279813/pexels-photo-1279813.jpeg?w=500","https://images.pexels.com/photos/1536314/pexels-photo-1536314.jpeg?w=500","https://images.pexels.com/photos/1482476/pexels-photo-1482476.jpeg?w=500","https://images.pexels.com/photos/1421903/pexels-photo-1421903.jpeg?w=500","https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg?w=500","https://images.pexels.com/photos/1165991/pexels-photo-1165991.jpeg?w=500","https://images.pexels.com/photos/1279813/pexels-photo-1279813.jpeg?w=500","https://images.pexels.com/photos/1536314/pexels-photo-1536314.jpeg?w=500","https://images.pexels.com/photos/1482476/pexels-photo-1482476.jpeg?w=500","https://images.pexels.com/photos/1421903/pexels-photo-1421903.jpeg?w=500","https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg?w=500","https://images.pexels.com/photos/1165991/pexels-photo-1165991.jpeg?w=500"]
+}
 ];
 
-const quotes=["الفراق لا يقتل القلب لكنه يترك القلب بلا حياة","الغدر من أقرب الناس هو الوجع الحقيقي","خنتني وكنت أظنك أماني","الخيانة جرح لا يلتئم","قلبي تعب من كتر الجراح"];
-const bgs=["https://images.pexels.com/photos/1482476/pexels-photo-1482476.jpeg?w=400","https://images.pexels.com/photos/1421903/pexels-photo-1421903.jpeg?w=400"];
+const container=document.getElementById('clips');
+const audio=document.getElementById('mainAudio');
+let currentClip=null;
 
-const feed=document.getElementById('feed');
-for(let i=0;i<20;i++){
-  let div=document.createElement('div'); div.className='box';
-  if(i%2==0){
-    // فيديو خفيف - مش هيحمل غير لما يظهر على الشاشة
-    let v=vids[i%vids.length];
-    div.innerHTML=`<video data-src="${v}" poster="" muted loop playsinline preload="none" controls></video>`;
-  }else{
-    div.innerHTML=`<div class=bg style="background-image:url('${bgs[i%bgs.length]}')"></div><div class=txt>${quotes[i%quotes.length]}</div>`;
-  }
-  feed.appendChild(div);
-}
-
-// تحميل الفيديو فقط لما يوصل له المستخدم - ده اللي بيخليه خفيف
-const observer=new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      let video=e.target.querySelector('video');
-      if(video && !video.src){
-        video.src=video.dataset.src;
-        video.load();
+clipsData.forEach((clip,clipIndex)=>{
+  let div=document.createElement('div');
+  div.className='clip';
+  div.innerHTML=`
+    <div class="clip-bg" id="bg-${clipIndex}"></div>
+    <div class="info">${clip.title}</div>
+    <div class="timer" id="timer-${clipIndex}">00:00 / 00:40</div>
+    <div class="clip-text" id="text-${clipIndex}">${clip.quotes[0]}</div>
+    <div class="progress" id="prog-${clipIndex}"></div>
+  `;
+  div.onclick=()=>playClip(clipIndex);
+  container.appendChild(div);
+  
+  // شغل الصور كل 2 ثانية = 20 صورة × 2 ثانية = 40 ثانية
+  let imgIdx=0;
+  let time=0;
+  setInterval(()=>{
+    if(currentClip===clipIndex){
+      time+=0.1;
+      document.getElementById(`prog-${clipIndex}`).style.width=(time/40*100)+"%";
+      let sec=Math.floor(time);
+      document.getElementById(`timer-${clipIndex}`).innerText=`00:${sec.toString().padStart(2,'0')} / 00:40`;
+      if(time>=40){time=0; imgIdx=0;}
+    }
+    if(Math.floor(time*10)%20===0){ // كل 2 ثانية غير الصورة
+      let bgEl=document.getElementById(`bg-${clipIndex}`);
+      let textEl=document.getElementById(`text-${clipIndex}`);
+      if(bgEl){
+        bgEl.style.backgroundImage=`url('${clip.images[imgIdx%clip.images.length]}')`;
+        textEl.innerText=clip.quotes[imgIdx%clip.quotes.length];
+        imgIdx++;
       }
     }
-  });
-},{rootMargin:"200px"});
+  },100);
+  
+  // أول صورة
+  document.getElementById(`bg-${clipIndex}`).style.backgroundImage=`url('${clip.images[0]}')`;
+});
 
-document.querySelectorAll('.box').forEach(b=>observer.observe(b));
+function playClip(index){
+  currentClip=index;
+  audio.src=clipsData[index].music;
+  audio.play();
+  document.getElementById('musicBtn').innerText="🔊 شغال: "+clipsData[index].title;
+}
 
-// موسيقى خفيفة - بتحمل فقط لما يدوس شغل
-const music=document.getElementById('bgMusic');
-const musicList=[
-"https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=sad-piano-110618.mp3"
-];
-music.src=musicList[0];
-let playing=false;
-document.getElementById('musicBtn').onclick=function(){
-  if(playing){music.pause(); this.innerText='🔇 شغل الموسيقى';}
-  else{music.play(); this.innerText='🔊 وقف الموسيقى';}
-  playing=!playing;
-};
+function toggleAll(){
+  if(audio.paused){
+    playClip(0);
+  }else{
+    audio.pause();
+    document.getElementById('musicBtn').innerText="▶️ شغل الكل بالموسيقى";
+  }
+}
 </script>
 </body>
 </html>
