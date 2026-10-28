@@ -4,47 +4,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>فيديوهات حزينة بتشتغل</title>
+<title>30 فيديو حزين مختلف</title>
 <style>
 body{background:#000;color:#fff;margin:0;text-align:center;font-family:Arial}
-.box{width:92%;max-width:380px;margin:20px auto;background:#111;border-radius:15px;overflow:hidden}
-video{width:100%;height:550px;background:#222}
-p{padding:10px;font-size:14px}
-#btn{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:#e50914;color:#fff;border:none;padding:12px 25px;border-radius:25px;z-index:999}
+h1{margin-top:65px;font-size:18px}
+.box{width:92%;max-width:380px;height:600px;margin:20px auto;border-radius:18px;overflow:hidden;position:relative;background:#111}
+.box video{width:100%;height:100%;object-fit:cover}
+.title{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.95));padding:40px 10px 12px;font-size:13px;font-weight:bold;line-height:1.6}
+.num{position:absolute;top:10px;right:10px;background:#e50914;padding:4px 9px;border-radius:8px;font-size:11px}
+.music{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.7);padding:4px 8px;border-radius:8px;font-size:10px}
+#btn{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:9999;background:#e50914;color:#fff;border:none;padding:12px 24px;border-radius:25px;font-weight:bold}
 </style>
 </head>
 <body>
-<button id="btn" onclick="playAll()">▶️ دوس لتشغيل الفيديوهات</button>
-<h1 style="margin-top:60px">3 فيديوهات حزينة - بتشتغل 100%</h1>
-
-<div class="box">
-<video id="v1" controls playsinline loop poster="https://picsum.photos/seed/sad1/400/600">
-<source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-</video>
-<p>فيديو 1 - لو اشتغل يبقى المشكلة من Mixkit</p>
-</div>
-
-<div class="box">
-<video controls playsinline loop poster="https://picsum.photos/seed/sad2/400/600">
-<source src="https://test-videos.co.uk/vids/sintel/mp4/h264/720/Sintel_720_10s_1MB.mp4" type="video/mp4">
-</video>
-<p>فيديو 2 - فراق وغدر</p>
-</div>
-
-<div class="box">
-<video controls playsinline loop poster="https://picsum.photos/seed/sad3/400/600">
-<source src="https://test-videos.co.uk/vids/jellyfish/mp4/h264/720/Jellyfish_720_10s_1MB.mp4" type="video/mp4">
-</video>
-<p>فيديو 3 - وجع قلب</p>
-</div>
-
-<audio id="music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"></audio>
+<button id="btn" onclick="playFirst()">▶️ شغل 30 فيديو حزين مع موسيقى موجعة</button>
+<h1>30 فيديو حزين مختلف - فراق وغدر ووجع قلب 💔</h1>
+<div id="feed"></div>
+<audio id="bg" loop></audio>
 
 <script>
-function playAll(){
-  document.getElementById('v1').play();
-  document.getElementById('music').play();
-  document.getElementById('btn').innerText="🔊 شغال";
+const videos=[
+{v:"https://cdn.pixabay.com/video/2020/06/12/41628-428691410_small.mp4", t:"الفراق لا يقتل القلب لكنه يترك القلب بلا حياة", m:"https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"},
+{v:"https://cdn.pixabay.com/video/2019/11/24/29798-376905921_small.mp4", t:"الغدر من أقرب الناس هو الوجع الحقيقي", m:"https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/05/25/40130-424930032_small.mp4", t:"خنتني وكنت أظنك أماني", m:"https://cdn.pixabay.com/download/audio/2022/03/24/audio_2a6d4d8322.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/02/09/32977-391908115_small.mp4", t:"أصعب فراق فراق من تحب", m:"https://cdn.pixabay.com/download/audio/2022/10/30/audio_1c8cfe3f6d.mp3"},
+{v:"https://cdn.pixabay.com/video/2016/11/22/6410-192322408_small.mp4", t:"الخيانة جرح لا يلتئم أبدا", m:"https://cdn.pixabay.com/download/audio/2021/11/25/audio_321f6c6c31.mp3"},
+{v:"https://cdn.pixabay.com/video/2021/04/12/70542-535610080_small.mp4", t:"قلبي تعب من كتر الجراح والخيانة", m:"https://cdn.pixabay.com/download/audio/2022/03/15/audio_5a22cb8f1e.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/11/04/55175-477892526_small.mp4", t:"رحلت وتركتني لوجعي وألمي", m:"https://cdn.pixabay.com/download/audio/2021/09/01/audio_b9bd4170e3.mp3"},
+{v:"https://cdn.pixabay.com/video/2021/08/04/83887-581180802_small.mp4", t:"الوفاء مات بموت قلوبكم", m:"https://cdn.pixabay.com/download/audio/2022/06/07/audio_b9bd4170e3.mp3"},
+{v:"https://cdn.pixabay.com/video/2019/10/09/27807-364119413_small.mp4", t:"الغدر طبع والوفاء عملة نادرة", m:"https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"},
+{v:"https://cdn.pixabay.com/video/2022/10/24/136191-763658694_small.mp4", t:"سامحتك حتى نسيت كيف أسامح نفسي", m:"https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/12/08/58566-489015305_small.mp4", t:"الفراق وجع والغدر موت", m:"https://cdn.pixabay.com/download/audio/2022/03/24/audio_2a6d4d8322.mp3"},
+{v:"https://cdn.pixabay.com/video/2021/09/12/88490-598223380_small.mp4", t:"خليتني أخاف أثق في حد تاني", m:"https://cdn.pixabay.com/download/audio/2022/10/30/audio_1c8cfe3f6d.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/03/19/33490-398029516_small.mp4", t:"وجع الخيانة لا يوصف ولا ينتهي", m:"https://cdn.pixabay.com/download/audio/2021/11/25/audio_321f6c6c31.mp3"},
+{v:"https://cdn.pixabay.com/video/2021/03/15/68167-524276386_small.mp4", t:"الغدر نهاية كل حب صادق", m:"https://cdn.pixabay.com/download/audio/2022/03/15/audio_5a22cb8f1e.mp3"},
+{v:"https://cdn.pixabay.com/video/2019/03/06/21723-321735937_small.mp4", t:"اشتقت لك رغم كل الغدر", m:"https://cdn.pixabay.com/download/audio/2021/09/01/audio_b9bd4170e3.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/07/30/45499-444312055_small.mp4", t:"الليل طويل بدونك يا حبيبي", m:"https://cdn.pixabay.com/download/audio/2022/06/07/audio_b9bd4170e3.mp3"},
+{v:"https://cdn.pixabay.com/video/2021/11/10/96958-645070673_small.mp4", t:"الوحدة بعد الفراق قاتلة للقلب", m:"https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"},
+{v:"https://cdn.pixabay.com/video/2022/01/13/104451-667109410_small.mp4", t:"بعد الفراق لا عتاب ولا رجوع", m:"https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/09/22/49884-460076026_small.mp4", t:"اللي يغدر مرة يغدر ألف مرة", m:"https://cdn.pixabay.com/download/audio/2022/03/24/audio_2a6d4d8322.mp3"},
+{v:"https://cdn.pixabay.com/video/2017/08/10/11130-229134775_small.mp4", t:"قلبي تعب من كتر الجراح", m:"https://cdn.pixabay.com/download/audio/2022/10/30/audio_1c8cfe3f6d.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/08/03/45878-444387762_small.mp4", t:"فراق الحبيب يوجع أكثر من الموت", m:"https://cdn.pixabay.com/download/audio/2021/11/25/audio_321f6c6c31.mp3"},
+{v:"https://cdn.pixabay.com/video/2016/04/12/2723-162586941_small.mp4", t:"لا تبكي على من غدر ابكي على طيبتك", m:"https://cdn.pixabay.com/download/audio/2022/03/15/audio_5a22cb8f1e.mp3"},
+{v:"https://cdn.pixabay.com/video/2019/05/14/23669-335889212_small.mp4", t:"علمتني الخيانة أن لا أثق بأحد", m:"https://cdn.pixabay.com/download/audio/2021/09/01/audio_b9bd4170e3.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/06/19/42344-431560042_small.mp4", t:"كسرت قلبي وكأنك لم تحبني يوما", m:"https://cdn.pixabay.com/download/audio/2022/06/07/audio_b9bd4170e3.mp3"},
+{v:"https://cdn.pixabay.com/video/2018/02/07/14205-254800666_small.mp4", t:"بعدك الدنيا ظلام", m:"https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"},
+{v:"https://cdn.pixabay.com/video/2021/05/18/74789-552637580_small.mp4", t:"حبيبي غدر بيا", m:"https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/10/08/51905-465499728_small.mp4", t:"وجع لا ينتهي من الغدر", m:"https://cdn.pixabay.com/download/audio/2022/03/24/audio_2a6d4d8322.mp3"},
+{v:"https://cdn.pixabay.com/video/2019/12/17/30148-380485508_small.mp4", t:"قلب مجروح لا يشفى", m:"https://cdn.pixabay.com/download/audio/2022/10/30/audio_1c8cfe3f6d.mp3"},
+{v:"https://cdn.pixabay.com/video/2022/02/07/106727-674323311_small.mp4", t:"خيانة الحبيب توجع", m:"https://cdn.pixabay.com/download/audio/2021/11/25/audio_321f6c6c31.mp3"},
+{v:"https://cdn.pixabay.com/video/2020/02/24/33299-393971877_small.mp4", t:"فراق وغدر ووجع قلب", m:"https://cdn.pixabay.com/download/audio/2022/03/15/audio_5a22cb8f1e.mp3"}
+];
+
+const feed=document.getElementById('feed');
+videos.forEach((item,i)=>{
+  let div=document.createElement('div');
+  div.className='box';
+  div.innerHTML=`<video data-src="${item.v}" data-music="${item.m}" loop muted playsinline preload="none" controls poster="https://picsum.photos/seed/sad${i}/400/600"></video><div class="num">فيديو ${i+1}/30</div><div class="music">🎵 أغنية ${i+1}</div><div class="title">${item.t}</div>`;
+  div.onclick=function(){
+    let vid=this.querySelector('video');
+    if(!vid.src){ vid.src=vid.dataset.src; vid.load(); }
+    vid.play();
+    let bg=document.getElementById('bg');
+    bg.src=vid.dataset.music; bg.volume=0.8; bg.play();
+    document.getElementById('btn').innerText=`🔊 شغال: فيديو ${i+1} - ${item.t.substring(0,20)}`;
+  };
+  feed.appendChild(div);
+});
+
+function playFirst(){
+  let v=document.querySelector('video');
+  if(v){ if(!v.src){ v.src=v.dataset.src; v.load(); } v.play(); document.getElementById('bg').src=v.dataset.music; document.getElementById('bg').play(); }
 }
 </script>
 </body>
